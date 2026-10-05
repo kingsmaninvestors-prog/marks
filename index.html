@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Zimbabwe School Record of Marks</title>
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#0f172a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Marks">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="icon" href="icon-192.png">
+<style>
+:root{--bg:#0f172a;--card:#1e293b;--text:#f8fafc;--muted:#94a3b8;--pass:#22c55e;--fail:#ef4444;--sick:#f59e0b;--abs:#64748b;--dnw:#a855f7;--new:#06b6d4;--trans:#ec4899;--test:#1e40af;--ex:#0e7490;--prac:#7c3aed;--danger:#dc2626;}
+*{box-sizing:border-box;font-family:Arial,Helvetica,sans-serif} body{margin:0;background:var(--bg);color:var(--text)}
+.school-header{display:flex;align-items:center;gap:12px;padding:10px 14px;background:var(--card);border-bottom:3px solid #38bdf8;flex-wrap:wrap}
+.school-logo{width:70px;height:70px;object-fit:contain;border:2px solid #38bdf8;border-radius:8px;background:#fff}.school-name{font-size:26px;font-weight:900;text-transform:uppercase;letter-spacing:1px;color:#38bdf8}
+.container{padding:10px;max-width:100%;margin:auto;overflow-x:auto}.toolbar{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;align-items:center}
+select,input,button{padding:5px 7px;border-radius:6px;border:1px solid #334155;background:var(--card);color:var(--text);font-size:11px}button{background:#38bdf8;color:#001;font-weight:700;cursor:pointer}button.ghost{background:#334155;color:var(--text)}button.danger{background:var(--danger);color:#fff;padding:2px 5px;font-size:10px}button.danger-lg{background:var(--danger);color:#fff;padding:4px 8px}
+button:disabled,input:disabled,select:disabled{opacity:.45;cursor:not-allowed}
+.meta-grid{display:grid;grid-template-columns:repeat(4,minmax(130px,1fr));gap:6px;margin:8px 0}.meta-grid label{font-size:9px;color:var(--muted);display:flex;flex-direction:column;gap:3px}.meta-grid input,.meta-grid select{width:100%}
+.cards{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:8px}.card{background:var(--card);padding:8px;border-radius:8px;border:1px solid #334155}.card h3{margin:0 0 3px;font-size:10px;color:var(--muted)}.big{font-size:16px;font-weight:800}
+.legend{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0;font-size:9px}.badge{padding:2px 6px;border-radius:999px;font-weight:700}.pass{background:var(--pass);color:#001}.fail{background:var(--fail);color:#fff}.sick{background:var(--sick);color:#001}.abs{background:var(--abs)}.dnw{background:var(--dnw)}.new{background:var(--new);color:#001}.trans{background:var(--trans)}.small{font-size:9px;color:var(--muted)}
+#exportArea{background:var(--card);padding:10px}table{width:100%;border-collapse:collapse;background:var(--card);border:2px solid #334155;font-size:9px;table-layout:auto}th,td{padding:2px 1px;border:1px solid #334155;text-align:center;white-space:nowrap}th{background:#0b1225;position:sticky;top:0}.mark-cell{display:flex;flex-direction:column;align-items:center;gap:1px}.mark-input{width:44px;text-align:center;background:#0f172a;border:1px solid #475569;color:#fff;border-radius:3px;padding:1px;font-size:9px}.percent-text{font-size:8px;font-weight:700}.name-input{min-width:150px;width:auto;text-align:left;background:#0f172a;border:1px solid #475569;color:#fff;border-radius:3px;padding:2px;font-size:9px}
+td.date-input{width:25px;padding:0}.assessment-head{display:flex;flex-direction:column;align-items:center;gap:1px}.assessment-title{width:42px;text-align:center;font-size:8px;padding:1px}.assessment-date{width:42px;font-size:7px;padding:1px}.assessment-delete{width:18px;height:18px;padding:0;border-radius:50%;background:#dc2626!important;color:#fff!important;border:none;font-weight:900;line-height:16px;font-size:12px;cursor:pointer}.assessment-delete:hover{filter:brightness(1.15)}.section-head-tests{background:var(--test);font-weight:800;font-size:10px}.section-head-ex{background:var(--ex);font-weight:800;font-size:10px}.section-head-prac{background:var(--prac);font-weight:800;font-size:10px}.id-col{border-right:2px solid #38bdf8!important}.section-border{border-right:3px solid #38bdf8!important}.actions-col{width:35px!important}.fail-cell{background:rgba(239,68,68,.6)!important;color:#fff!important}.status-pass{background:#bbf7d0!important;color:#000!important;font-weight:700}.status-fail{background:#fecaca!important;color:#000!important;font-weight:700}
+.note{font-size:10px;color:var(--muted);margin:5px 0}.offline{font-size:10px;color:#86efac;font-weight:700}
+#installBtn{background:#22c55e;color:#001}
+.install-card{background:var(--card);border:1px solid #334155;border-left:4px solid #22c55e;border-radius:8px;padding:8px 12px;margin:0 0 10px;font-size:11px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.install-card h2{margin:0;font-size:12px;color:#38bdf8}
+.install-card .mute{color:var(--muted);margin:0}
+body{padding-top:env(safe-area-inset-top);padding-left:env(safe-area-inset-left);padding-right:env(safe-area-inset-right);padding-bottom:env(safe-area-inset-bottom)}
+@media print{.assessment-delete{display:none!important}}
+@media(max-width:700px){.cards{grid-template-columns:repeat(2,1fr)}.meta-grid{grid-template-columns:repeat(2,1fr)}.school-name{font-size:19px}}
+</style>
+</head>
+<body>
+<div class="school-header">
+  <img id="logoPreview" class="school-logo" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNzAiIGhlaWdodD0iNzAiIGZpbGw9IiMzOGJkZjgiIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZD0iTTEyIDJMMSA3bDExIDUgMTEtNS0xMS01Wm0xMCAxN0wxMiAxM2wtMTAgNXY1bDEwIDUgMTAtNXY1eiIvPjwvc3ZnPg==" alt="Logo">
+  <div style="flex:1;min-width:220px"><input id="schoolNameInput" class="school-name" placeholder="ENTER SCHOOL FULL NAME" style="background:transparent;border:none;width:100%" oninput="saveSettings()"><div style="font-size:12px;color:var(--muted)">Class: <select id="classSelectTop" onchange="loadClass()"></select> <button id="delClassBtn" class="danger-lg" onclick="deleteClass()" title="Delete the selected class">🗑 Delete Class</button> | <span class="offline">● FULLY OFFLINE</span></div></div>
+  <button id="exportBtn">📄 Export / Print A4 PDF</button>
+</div>
+<div class="container">
+  <div class="install-card"><h2>Install</h2><div id="installArea"></div>
+    <details style="flex-basis:100%"><summary style="cursor:pointer;color:#38bdf8;font-weight:700">Step-by-step install guide</summary>
+      <div style="margin-top:6px;line-height:1.55;color:var(--text)">
+        <b>Why the Install button may not appear:</b> browsers only allow installing an app from a web address (https), not from a file opened on your device. Do Part A once, then Part B on each device.<br><br>
+        <b>Part A – Put the app online (one time, free)</b><br>
+        1. Unzip <b>Marks_App.zip</b>. Keep all 6 files together in the <b>marks</b> folder.<br>
+        2. Upload that folder to a free host. Easiest: <b>Netlify Drop</b> (app.netlify.com/drop) – drag the <b>marks</b> folder onto the page. Alternative: <b>GitHub Pages</b> – create a repository, upload the 6 files, then in Settings → Pages publish from the main branch.<br>
+        3. The host gives you a link starting with <b>https://</b>. Open it once while you have internet.<br><br>
+        <b>Part B – Install on each device</b><br>
+        • <b>Android (Chrome):</b> open the link, tap the green <b>Install app</b> button above (or Chrome menu ⋮ → Install app).<br>
+        • <b>Windows/Mac (Chrome or Edge):</b> open the link, click <b>Install app</b> above (or the install icon at the right of the address bar).<br>
+        • <b>iPhone/iPad (Safari):</b> open the link, tap Share → <b>Add to Home Screen</b>.<br>
+        4. Open the app from its icon. It now works fully offline.<br><br>
+        <b>Important:</b> marks are stored on the device where you type them. Use <b>Backup Data</b> regularly, and if you ever change the link, restore your backup in the new one.
+      </div>
+    </details></div>
+  <div class="toolbar"><input id="newClass" placeholder="New Class"><button onclick="addClass()">Add Class</button><input id="newSurname" placeholder="Surname"><input id="newName" placeholder="Name"><button onclick="addStudent()">Add Student</button><button class="ghost" onclick="addColumn('Tests')">+ Test</button><button class="ghost" onclick="addColumn('Exercises')">+ Exercise</button><button class="ghost" onclick="addColumn('Practical')">+ Practical</button><span class="note" style="margin-left:4px">Everything below (term, year, subject, teacher, assessments, titles, dates, marks) is saved separately for each class. Remove an assessment with the × in its heading.</span><input type="file" id="logoUpload" accept="image/*" style="display:none" onchange="uploadLogo(event)"><button class="ghost" onclick="document.getElementById('logoUpload').click()">Logo</button><button class="ghost" onclick="exportBackup()">Backup Data</button><input type="file" id="restoreFile" accept="application/json" style="display:none" onchange="restoreBackup(event)"><button class="ghost" onclick="document.getElementById('restoreFile').click()">Restore Data</button></div>
+  <div class="meta-grid">
+    <label>Term<select id="termSelect" onchange="saveSettings()"><option>Term 1</option><option>Term 2</option><option>Term 3</option><option>End of Year Exam</option></select></label>
+    <label>Year<input id="yearInput" placeholder="e.g. 2026" oninput="saveSettings()"></label>
+    <label>Subject / Learning Area<input id="subjectInput" placeholder="Enter subject" oninput="saveSettings()"></label>
+    <label>Teacher<input id="teacherInput" placeholder="Class/Subject teacher" oninput="saveSettings()"></label>
+  </div>
+  <div class="note">Assessment entries accept marks such as <b>7/10</b>, <b>18/25</b> or codes <b>S, A, DNW, N, T</b>. Assessment titles and dates can be edited. The PDF is generated locally by your browser; no internet, account or cloud service is required.</div>
+  <div class="cards"><div class="card"><h3>Class Avg</h3><div class="big" id="classAvg">0%</div></div><div class="card"><h3>Tests Avg</h3><div class="big" id="testAvg">0%</div></div><div class="card"><h3>Exercises Avg</h3><div class="big" id="exAvg">0%</div></div><div class="card"><h3>Pass Rate</h3><div class="big" id="passRate">0%</div></div><div class="card"><h3>Best Learner</h3><div class="big" id="bestStudent">-</div></div></div>
+  <div class="legend"><span class="badge pass">Pass ≥ 50%</span><span class="badge fail">Fail &lt; 50%</span><span class="badge sick">S = Sick</span><span class="badge abs">A = Absent</span><span class="badge dnw">DNW</span><span class="badge new">N = New</span><span class="badge trans">T = Trans</span><span class="small">Enter: 7/10 | Click Name to Edit | x to Delete</span></div>
+  <div id="exportArea"><table id="marksTable"></table><div class="signatures" style="margin-top:15px;display:flex;justify-content:space-between;font-size:10px;color:#000"><div>Class / Subject Teacher: ____________________<br>Signature: __________________ Date: ___/___/____</div><div>Head of Department / School Head: ____________________<br>Signature: __________________ Official Stamp: [ ]</div></div></div>
+</div>
+<script>
+/* ===== Data model (v7) =====
+ data = { school:{name,logo}, lastClass, classes:{ [name]:{ settings:{term,year,subject,teacher}, structure:{Tests,Exercises,Practical}, students:[] } } }
+ Every class keeps its own settings, assessments and marks. */
+const KEY='marksDataV7_0', OLD_KEYS=['marksDataV6_0'];
+const SECS=['Tests','Exercises','Practical'];
+function defStructure(){return{Tests:{count:2,dates:['',''],titles:['Test 1','Test 2']},Exercises:{count:3,dates:['','',''],titles:['Exercise 1','Exercise 2','Exercise 3']},Practical:{count:1,dates:[''],titles:['Practical 1']}};}
+function defSettings(){return{term:'Term 1',year:new Date().getFullYear().toString(),subject:'',teacher:''};}
+function loadRaw(){let raw=null;try{raw=JSON.parse(localStorage.getItem(KEY));}catch(e){}if(!raw){for(const k of OLD_KEYS){try{raw=JSON.parse(localStorage.getItem(k));}catch(e){}if(raw)break;}}return raw||{};}
+let data=loadRaw();
+let currentClass=null;
+function label(sec,n){return(sec==='Tests'?'Test ':sec==='Exercises'?'Exercise ':'Practical ')+n;}
+function normStructure(st,students){
+  st=st||defStructure();
+  for(const sec of SECS){
+    if(!st[sec])st[sec]={count:0,dates:[],titles:[]};
+    const x=st[sec];x.count=Number(x.count||0);x.dates=x.dates||[];x.titles=x.titles||[];
+    while(x.dates.length<x.count)x.dates.push('');
+    while(x.titles.length<x.count)x.titles.push(label(sec,x.titles.length+1));
+  }
+  students.forEach(s=>{s.marks=s.marks||{};for(const sec of SECS){s.marks[sec]=s.marks[sec]||[];while(s.marks[sec].length<st[sec].count)s.marks[sec].push('');}});
+  return st;
+}
+function normalise(){
+  const oldStruct=data.structure,oldSet=data.settings||{};
+  data.school=data.school||{name:oldSet.schoolName||'',logo:oldSet.logo||''};
+  data.classes=data.classes||{};
+  for(const c in data.classes){
+    const cl=data.classes[c];cl.students=cl.students||[];
+    if(!cl.structure&&oldStruct)cl.structure=JSON.parse(JSON.stringify(oldStruct)); // migrate old global structure
+    if(!cl.settings){cl.settings=Object.assign(defSettings(),{term:oldSet.term,year:oldSet.year,subject:oldSet.subject,teacher:oldSet.teacher});}
+    for(const [k,v] of Object.entries(defSettings()))if(cl.settings[k]===undefined||cl.settings[k]===null)cl.settings[k]=v;
+    cl.structure=normStructure(cl.structure,cl.students);
+  }
+  delete data.structure;delete data.settings;
+  const names=Object.keys(data.classes);
+  if(!data.lastClass||!data.classes[data.lastClass])data.lastClass=names[0]||null;
+}
+normalise();
+function saveData(){try{localStorage.setItem(KEY,JSON.stringify(data));}catch(e){alert('Could not save: storage is full. Please export a backup and remove unneeded data.');}}
+const C=()=>currentClass?data.classes[currentClass]:null;
+const S=()=>C().structure;
+function activeSections(){const st=S();return SECS.filter(sec=>st[sec]&&Number(st[sec].count)>0);}
+
+function saveSettings(){
+  data.school.name=document.getElementById('schoolNameInput').value;
+  if(C()){const s=C().settings;s.term=document.getElementById('termSelect').value;s.year=document.getElementById('yearInput').value;s.subject=document.getElementById('subjectInput').value;s.teacher=document.getElementById('teacherInput').value;}
+  saveData();
+}
+function uploadLogo(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=ev=>{data.school.logo=ev.target.result;document.getElementById('logoPreview').src=ev.target.result;saveData();};r.readAsDataURL(f);}
+
+/* ===== Classes ===== */
+function addClass(){
+  const n=document.getElementById('newClass').value.trim();
+  if(!n)return;
+  if(data.classes[n])return alert('A class with that name already exists.');
+  const prev=C();
+  const settings=defSettings();
+  if(prev){settings.term=prev.settings.term;settings.year=prev.settings.year;settings.teacher=prev.settings.teacher;}
+  data.classes[n]={settings,structure:defStructure(),students:[]};
+  currentClass=n;data.lastClass=n;
+  document.getElementById('newClass').value='';
+  renderClasses();saveData();
+}
+function deleteClass(){
+  if(!currentClass)return;
+  const cl=C();
+  if(!confirm('Delete class "'+currentClass+'"?\n\nThis permanently removes the class, its '+cl.students.length+' learner(s), all assessments and all marks.\nThis cannot be undone unless you restore a backup.'))return;
+  if(!confirm('Final check: really delete "'+currentClass+'"?'))return;
+  delete data.classes[currentClass];
+  const names=Object.keys(data.classes);
+  currentClass=names[0]||null;data.lastClass=currentClass;
+  renderClasses();saveData();
+}
+function renderClasses(){
+  const sel=document.getElementById('classSelectTop');sel.innerHTML='';
+  Object.keys(data.classes).forEach(c=>{const o=document.createElement('option');o.value=c;o.textContent=c;sel.appendChild(o);});
+  if(!currentClass||!data.classes[currentClass])currentClass=data.lastClass&&data.classes[data.lastClass]?data.lastClass:(Object.keys(data.classes)[0]||null);
+  if(currentClass)sel.value=currentClass;
+  renderTable();
+}
+function loadClass(){
+  currentClass=document.getElementById('classSelectTop').value||null;
+  data.lastClass=currentClass;saveData();renderTable();
+}
+
+/* ===== Learners & assessments ===== */
+function addStudent(){
+  if(!currentClass)return alert('Select a class first');
+  const surname=document.getElementById('newSurname').value.trim(),name=document.getElementById('newName').value.trim();
+  if(!surname||!name)return;
+  const st=S();const s={surname,name,marks:{},comment:''};
+  for(const sec of SECS)s.marks[sec]=Array(st[sec].count).fill('');
+  C().students.push(s);
+  document.getElementById('newSurname').value='';document.getElementById('newName').value='';
+  renderTable();saveData();
+}
+function deleteStudent(i){if(confirm('Delete this learner?')){C().students.splice(i,1);renderTable();saveData();}}
+function updateStudentName(i,f,v){C().students[i][f]=v;saveData();}
+function addColumn(sec){
+  if(!currentClass)return alert('Select a class first');
+  const x=S()[sec];x.count++;x.dates.push('');x.titles.push(label(sec,x.count));
+  C().students.forEach(s=>{s.marks[sec]=s.marks[sec]||[];s.marks[sec].push('');});
+  renderTable();saveData();
+}
+function deleteAssessment(sec,i){
+  const x=S()[sec];
+  if(!x||i<0||i>=x.count)return;
+  const lab=x.titles[i]||sec+' '+(i+1);
+  if(!confirm('Delete "'+lab+'" from '+sec+' in class '+currentClass+'?\n\nThis removes the assessment and its marks for this class only. This cannot be undone unless you restore a backup.'))return;
+  x.titles.splice(i,1);x.dates.splice(i,1);x.count=Math.max(0,x.count-1);
+  C().students.forEach(s=>{s.marks[sec]=s.marks[sec]||[];s.marks[sec].splice(i,1);});
+  renderTable();saveData();
+}
+function updateDate(sec,i,v){S()[sec].dates[i]=v;saveData();}
+function updateTitle(sec,i,v){S()[sec].titles[i]=v;saveData();}
+function updateMark(i,sec,j,v){C().students[i].marks[sec][j]=v.toUpperCase();renderTable();saveData();}
+
+/* ===== Calculations ===== */
+function parseMark(v){v=(v||'').trim().toUpperCase();if(['S','A','DNW','N','T'].includes(v))return{type:'code',code:v,percent:null};if(v.includes('/')){let[a,b]=v.split('/');a=parseFloat(a);b=parseFloat(b);if(!isNaN(a)&&!isNaN(b)&&b>0)return{type:'mark',got:a,total:b,percent:a/b*100};}return{type:'invalid',percent:null};}
+function calcAverage(a){let sum=0,n=0;a.forEach(v=>{const p=parseMark(v).percent;if(p!=null){sum+=p;n++;}});return n?sum/n:null;}
+function getStatus(p){return p==null?{text:'',cls:''}:p>=50?{text:'Pass',cls:'status-pass'}:{text:'Fail',cls:'status-fail'};}
+function getCodeStatus(c){return c==='S'?{text:'Sick',cls:'sick'}:c==='A'?{text:'Absent',cls:'abs'}:c==='DNW'?{text:'DNW',cls:'dnw'}:c==='N'?{text:'New',cls:'new'}:c==='T'?{text:'Trans',cls:'trans'}:{text:'',cls:''};}
+function getComment(a){if(a==null)return'';if(a>=80)return'Excellent';if(a>=65)return'Very Good';if(a>=50)return'Pass';return'Needs Support';}
+function esc(v){return String(v??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));}
+
+/* ===== Rendering ===== */
+function fillMeta(){
+  document.getElementById('schoolNameInput').value=data.school.name||'';
+  document.getElementById('logoPreview').src=data.school.logo||document.getElementById('logoPreview').src;
+  const s=C()?C().settings:{term:'Term 1',year:'',subject:'',teacher:''};
+  document.getElementById('termSelect').value=s.term;
+  document.getElementById('yearInput').value=s.year;
+  document.getElementById('subjectInput').value=s.subject;
+  document.getElementById('teacherInput').value=s.teacher;
+  const has=!!C();
+  ['termSelect','yearInput','subjectInput','teacherInput','delClassBtn','exportBtn'].forEach(id=>document.getElementById(id).disabled=!has);
+}
+function resetCards(){['testAvg','exAvg','classAvg','passRate'].forEach(id=>document.getElementById(id).textContent='0%');document.getElementById('bestStudent').textContent='-';}
+function renderTable(){
+  fillMeta();
+  const tbl=document.getElementById('marksTable');
+  if(!currentClass){tbl.innerHTML='<tr><td style="padding:14px">No classes yet. Type a class name above and press <b>Add Class</b> to start.</td></tr>';resetCards();return;}
+  const students=C().students,st=S(),secs=activeSections();
+
+  let h='<thead><tr>';
+  h+='<th rowspan="2" class="id-col">Pos</th><th rowspan="2" class="id-col">SURNAME</th><th rowspan="2" class="id-col">NAME</th><th rowspan="2" class="actions-col section-border">X</th>';
+  for(const sec of secs){
+    const cls=sec==='Tests'?'section-head-tests':(sec==='Exercises'?'section-head-ex':'section-head-prac');
+    const border=sec===secs[secs.length-1]?' section-border':'';
+    h+='<th colspan="'+st[sec].count+'" class="'+cls+border+'">'+sec.toUpperCase()+'</th>';
+  }
+  h+='<th rowspan="2">Status</th><th rowspan="2">Comment</th></tr><tr>';
+  for(const sec of secs){
+    for(let i=0;i<st[sec].count;i++){
+      const border=i===st[sec].count-1?' section-border':'';
+      h+='<td class="date-input'+border+'"><div class="assessment-head">';
+      h+='<input class="assessment-title" value="'+esc(st[sec].titles[i])+'" title="Assessment title" onchange="updateTitle(\''+sec+'\','+i+',this.value)">';
+      h+='<input class="assessment-date" type="date" value="'+esc(st[sec].dates[i])+'" onchange="updateDate(\''+sec+'\','+i+',this.value)">';
+      h+='<button class="assessment-delete" title="Delete this assessment" onclick="deleteAssessment(\''+sec+'\','+i+')">×</button>';
+      h+='</div></td>';
+    }
+  }
+  h+='</tr></thead><tbody>';
+
+  const rows=students.map((s,i)=>({sIdx:i,overall:calcAverage(secs.reduce((arr,sec)=>arr.concat(s.marks[sec]||[]),[]))??0,data:s}));
+  rows.sort((a,b)=>b.overall-a.overall);
+  const totals={Tests:[],Exercises:[],Practical:[],overall:[],pass:0};
+
+  rows.forEach((r,pos)=>{
+    const s=r.data,i=r.sIdx;
+    h+='<tr><td class="id-col"><b>'+(pos+1)+'</b></td>';
+    h+='<td class="id-col"><input class="name-input" value="'+esc(s.surname)+'" onchange="updateStudentName('+i+',\'surname\',this.value)"></td>';
+    h+='<td class="id-col"><input class="name-input" value="'+esc(s.name)+'" onchange="updateStudentName('+i+',\'name\',this.value)"></td>';
+    h+='<td class="section-border"><button class="danger" onclick="deleteStudent('+i+')">x</button></td>';
+    for(const sec of secs){
+      (s.marks[sec]||[]).forEach((m,j)=>{
+        const mark=parseMark(m);
+        const border=j===(s.marks[sec]||[]).length-1?' section-border':'';
+        let cls='';
+        if(mark.type==='mark'&&mark.percent<50)cls='fail-cell';
+        if(mark.type==='code')cls=getCodeStatus(mark.code).cls;
+        const pct=mark.type==='mark'?mark.percent.toFixed(1)+'%':(mark.type==='code'?mark.code:'');
+        h+='<td class="'+cls+border+'"><div class="mark-cell">';
+        h+='<input class="mark-input" value="'+esc(m)+'" placeholder="7/10" onchange="updateMark('+i+',\''+sec+'\','+j+',this.value)">';
+        h+='<span class="percent-text">'+pct+'</span></div></td>';
+      });
+    }
+    const status=getStatus(r.overall),comment=getComment(r.overall);
+    s.comment=comment;
+    if(r.overall){totals.overall.push(r.overall);if(r.overall>=50)totals.pass++;}
+    for(const sec of secs){const a=calcAverage(s.marks[sec]||[]);if(a!=null)totals[sec].push(a);}
+    h+='<td class="'+status.cls+'">'+status.text+'</td><td>'+comment+'</td></tr>';
+  });
+  h+='</tbody>';
+  tbl.innerHTML=h;
+
+  const av=a=>a.length?(a.reduce((x,y)=>x+y,0)/a.length).toFixed(1)+'%':'0%';
+  document.getElementById('testAvg').textContent=av(totals.Tests);
+  document.getElementById('exAvg').textContent=av(totals.Exercises);
+  document.getElementById('classAvg').textContent=av(totals.overall);
+  document.getElementById('passRate').textContent=students.length?((totals.pass/students.length)*100).toFixed(0)+'%':'0%';
+  document.getElementById('bestStudent').textContent=rows[0]?rows[0].data.surname+' '+rows[0].data.name+' - '+rows[0].overall.toFixed(1)+'%':'-';
+}
+
+/* ===== PDF export ===== */
+function formatDate(v){if(!v)return'';const d=new Date(v+'T00:00:00');return isNaN(d)?v:d.toLocaleDateString('en-GB');}
+function buildPrintTable(){
+  const students=C().students,st=S(),secs=activeSections();
+  const totalAssess=secs.reduce((n,sec)=>n+st[sec].count,0);
+  let h='<table class="print-table"><thead><tr><th rowspan="2" class="pos">Pos</th><th rowspan="2" class="surname">Surname</th><th rowspan="2" class="name">Name</th>';
+  for(const sec of secs){const cls=sec==='Tests'?'tests':(sec==='Exercises'?'exercises':'practical');h+='<th colspan="'+st[sec].count+'" class="'+cls+'">'+esc(sec)+'</th>';}
+  h+='<th rowspan="2" class="status">Status</th><th rowspan="2" class="comment">Comment</th></tr><tr>';
+  for(const sec of secs)for(let i=0;i<st[sec].count;i++)h+='<th class="assess"><span>'+esc(st[sec].titles[i])+'</span><small>'+formatDate(st[sec].dates[i])+'</small></th>';
+  h+='</tr></thead><tbody>';
+  const rows=students.map((s,i)=>({i,s,a:calcAverage(secs.reduce((arr,sec)=>arr.concat(s.marks[sec]||[]),[]))??0})).sort((a,b)=>b.a-a.a);
+  rows.forEach((r,pos)=>{
+    const status=getStatus(r.a);
+    h+='<tr><td>'+(pos+1)+'</td><td class="left">'+esc(r.s.surname)+'</td><td class="left">'+esc(r.s.name)+'</td>';
+    for(const sec of secs)(r.s.marks[sec]||[]).forEach(m=>{const p=parseMark(m);const val=p.type==='mark'?esc(m)+'<br><b>'+p.percent.toFixed(1)+'%</b>':(p.type==='code'?p.code:'');h+='<td>'+val+'</td>';});
+    h+='<td class="'+(status.text==='Pass'?'print-pass':'print-fail')+'">'+status.text+'</td><td>'+esc(getComment(r.a))+'</td></tr>';
+  });
+  h+='</tbody></table>';
+  return{html:h,totalAssess};
+}
+function exportPDF(){
+  if(!currentClass)return alert('Add or select a class first');
+  const p=buildPrintTable(),set=C().settings;
+  const font=Math.max(4.6,Math.min(8.5,8.5-Math.max(0,p.totalAssess-10)*0.18));
+  const logo=data.school.logo?'<img src="'+data.school.logo+'" class="print-logo">':'';
+  const title=esc(data.school.name||'SCHOOL RECORD OF MARKS');
+  const win=window.open('','_blank');
+  if(!win)return alert('Please allow pop-ups to export the PDF.');
+  const css='@page{size:A4 landscape;margin:7mm}*{box-sizing:border-box}body{margin:0;color:#000;background:#fff;font-family:Arial,Helvetica,sans-serif}.sheet{width:100%}.header{display:flex;align-items:center;gap:8px;border-bottom:2px solid #000;padding-bottom:4px;margin-bottom:5px}.print-logo{width:18mm;height:18mm;object-fit:contain}.title{font-size:13pt;font-weight:800;text-transform:uppercase}.subtitle{font-size:8pt;line-height:1.35}.meta{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:3px;font-size:7.5pt;margin:4px 0 5px}.meta div{border:1px solid #000;padding:2px 4px}.print-table{width:100%;border-collapse:collapse;table-layout:fixed;font-size:'+font+'pt;line-height:1.05}.print-table th,.print-table td{border:.35pt solid #000;padding:1.2mm .5mm;text-align:center;vertical-align:middle;overflow-wrap:anywhere}.print-table th{font-weight:800;background:#e5e7eb}.print-table thead{display:table-header-group}.print-table tr{page-break-inside:avoid;break-inside:avoid}.print-table .pos{width:6mm}.print-table .surname{width:26mm}.print-table .name{width:24mm}.print-table .status{width:14mm}.print-table .comment{width:20mm}.print-table .assess{font-size:calc('+font+'pt - .4pt);padding:.7mm .2mm}.assess span,.assess small{display:block;word-break:break-word}.assess small{font-weight:400;font-size:calc('+font+'pt - 1.2pt);margin-top:.3mm}.tests{background:#c7d2fe!important}.exercises{background:#bae6fd!important}.practical{background:#ddd6fe!important}.left{text-align:left!important}.print-pass{background:#dcfce7!important;font-weight:700}.print-fail{background:#fee2e2!important;font-weight:700}.signatures{margin-top:8mm;display:grid;grid-template-columns:1fr 1fr;gap:20mm;font-size:8pt;line-height:1.7}.footer{margin-top:4mm;border-top:.5pt solid #000;padding-top:1.5mm;font-size:6.5pt;text-align:center}.legend{font-size:6.5pt;margin:3px 0}';
+  const body='<div class="sheet"><div class="header">'+logo+'<div><div class="title">'+title+'</div><div class="subtitle">OFFICIAL RECORD OF MARKS | CLASS: <b>'+esc(currentClass)+'</b> | TERM: <b>'+esc(set.term)+'</b> | YEAR: <b>'+esc(set.year)+'</b></div></div></div><div class="meta"><div><b>Subject / Learning Area:</b> '+esc(set.subject||'________________')+'</div><div><b>Teacher:</b> '+esc(set.teacher||'________________')+'</div><div><b>Class Average:</b> '+esc(document.getElementById('classAvg').textContent)+'</div><div><b>Pass Rate:</b> '+esc(document.getElementById('passRate').textContent)+'</div></div><div class="legend"><b>Key:</b> S = Sick &nbsp; A = Absent &nbsp; DNW = Did Not Write &nbsp; N = New &nbsp; T = Transferred</div>'+p.html+'<div class="signatures"><div>Teacher: ______________________________________<br>Signature: ____________________ Date: ____ / ____ / ______</div><div>HOD / School Head: _____________________________<br>Signature: ____________________ Official Stamp: __________</div></div><div class="footer">Computer-generated offline record. Assessment marks are recorded as raw score/total with calculated percentages. Printed on A4 landscape with automatic compact sizing for additional assessments.</div></div>';
+  win.document.open();
+  win.document.write('<!doctype html><html><head><meta charset="utf-8"><title>Record of Marks</title><style>'+css+'</style></head><body>'+body+'</body></html>');
+  win.document.close();
+  setTimeout(()=>win.print(),350);
+}
+
+/* ===== Backup / restore ===== */
+function exportBackup(){const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='marks-system-backup-'+new Date().toISOString().slice(0,10)+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);}
+function restoreBackup(e){
+  const f=e.target.files[0];if(!f)return;
+  const r=new FileReader();
+  r.onload=()=>{try{
+    const x=JSON.parse(r.result);
+    if(!x||!x.classes)throw new Error();
+    if(!confirm('Restore this backup? Current offline data will be replaced.'))return;
+    data=x;normalise();currentClass=null;saveData();renderClasses();alert('Backup restored successfully.');
+  }catch(err){alert('Invalid backup file.');}};
+  r.readAsText(f);e.target.value='';
+}
+
+/* ===== Install as app (PWA) ===== */
+let deferredPrompt=null;
+function renderInstall(){
+  const ios=/iphone|ipad|ipod/i.test(navigator.userAgent);
+  const std=window.matchMedia('(display-mode: standalone)').matches||navigator.standalone;
+  const el=document.getElementById('installArea');
+  if(std)el.innerHTML='<p class="mute">Installed. You are running the app.</p>';
+  else if(deferredPrompt)el.innerHTML='<button id="installBtn">⬇ Install app</button>';
+  else if(ios)el.innerHTML='<p class="mute">On iPhone/iPad: tap Share, then Add to Home Screen.</p>';
+  else el.innerHTML='<p class="mute">Open this page over https in Chrome or Edge, then use the browser menu: Install app.</p>';
+  const b=document.getElementById('installBtn');
+  if(b)b.onclick=installApp;
+}
+async function installApp(){if(!deferredPrompt)return;deferredPrompt.prompt();await deferredPrompt.userChoice;deferredPrompt=null;renderInstall();}
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;renderInstall();});
+window.addEventListener('appinstalled',()=>{deferredPrompt=null;renderInstall();});
+if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
+if(navigator.storage&&navigator.storage.persist){navigator.storage.persist().catch(()=>{});}
+renderInstall();
+
+document.getElementById('exportBtn').onclick=exportPDF;
+renderClasses();
+</script>
+</body>
+</html>
